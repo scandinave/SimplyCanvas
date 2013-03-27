@@ -7,37 +7,49 @@ Icon.prototype = new Container();
 Icon.prototype.constructor = Icon;
 Icon.prototype.parent = Container.prototype;
 Icon.prototype.draw = function(){
+	var text;
+	var image;
+	(this.child[0] instanceof Text) ? text = this.child[0] : image = this.child[1];
+	(this.child[1] instanceof Picture) ? image = this.child[1] : text = this.child[0];
+
 	// On initialise la police du text pour récuperer la taille.
-	this.child[0].init();
+	text.init();
 	// On redéfinit la taille de l'icone par rapport à celle de l'image ou du texte.
-	this.width = (this.child[1].width > this.child[0].width) ? this.child[1].width : this.child[0].width;
-	this.height = this.child[1].height + this.child[0].height + 10;
+	this.width = (image.width > text.width) ? image.width : text.width;
+	this.height = image.height + text.height;
 	
 	// On positionne l'image par rapport à l'icone
-	this.child[1].x = this.x + (this.width - this.child[1].width)/2;
-	this.child[1].y = this.y ;
+	image.x = this.x + (this.width - image.width)/2;
+	image.y = this.y ;
 	
 	// On positionne le texte dans l'icone
-	this.child[0].x = this.x + (this.width - this.child[0].width)/2;
-	this.child[0].y = this.y + this.child[1].height + this.child[0].height;
+	text.x = this.x + (this.width - text.width)/2;
+	text.y = this.y + image.height + text.height;
 	// On affiche l'icon.
 	for(var i = 0; i < this.child.length; i++){
 			this.child[i].draw();
 	}
 	
-	//this.ctx.strokeRect(this.x, this.y, this.width, this.height);
+	this.ctx.strokeRect(this.x, this.y, this.width, this.height);
 };
 
-Icon.prototype.addText = function(item){
-		this.child[0] = item;
-};
-
-
-Icon.prototype.addPicture = function(item){
-	console.log(this.canvas, this.ctx);
-		item.canvas = this.canvas;
-		item.ctx = this.ctx;
-		this.child[1] = item;
+/**
+*	Ajout un item à l'icon. 
+*	Surchage la méthode de parent Container
+*/
+Icon.prototype.addItem = function(item){
+	// On vérifie que l'item est un text ou une image. Sinon on lève une erreur.
+	if(item instanceof Text || item instanceof Picture){ 
+		// Pour chaque attribut à transmettre on compare avec l'attribut présent dans l'object (this) 
+		for(var i = 0; i < this.composition.length; i++){ 
+			var comp = this.composition[i];
+			item[comp] = this[comp];  // On l'ajoute à l'objet fils.
+		}
+		this.child.push(item);
+	} else {
+		throw new Error("L'item doit être un Text ou une Image");
+	}
+	
 };
 
 Icon.prototype.mouseUp = function(e){

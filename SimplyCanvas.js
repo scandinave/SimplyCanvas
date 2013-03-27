@@ -17,6 +17,8 @@ var SimplyCanvas = function(name, width, height){
 		var ctx = canvas.getContext('2d');
 		
 		this.addItem = function(item){
+			item.canvas = canvas;
+			item.ctx = ctx;
 			items.push(item);
 		};
 		
@@ -32,7 +34,7 @@ var SimplyCanvas = function(name, width, height){
 			return items;
 		};
 		
-		var update = function(){
+		function update(){
 			
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			for(var i = 0; i < items.length; i++){
@@ -42,7 +44,7 @@ var SimplyCanvas = function(name, width, height){
 		};
 		
 		this.update = function(){
-			
+			//var timer = setInterval(update, 1000/60);
 			update();
 		};
 		
