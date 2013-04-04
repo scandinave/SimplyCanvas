@@ -9,25 +9,24 @@ function Item(x, y, width, height){
 	this.draggable = false;
 	this.movable = false; // Indique qu'un élément est déplaçable au clavier
 	this.movableKey = {}; // Tableau associatif indiquant les touches utilisées pour le déplacement. ex : {"haut" : 38, "bas" : 40, "droite" : 39,  "gauche" : 37}
-	this.moving = {"haut" : false, "bas" : false, "droite" : false,  "gauche" : false}; // Indique dans quel direction est entrain de bouger l'item.
+	this.moving = {"haut" : false, "bas" : false, "droite" : false,  "gauche" : false};
 	this.difX = 0; // Calcule le différentiel de position entre la souris et le coin supérieur gauche d'un item
 	this.difY = 0; // lors du clique sur un item.
 	this.onDrag = false; // Détermine si un item est en phase de drop.
-	this.ennemy = new Array();
+	this.child = new Array();
 }
 
-Item.prototype.update = function(){
-	// En developpement
-	if(this.ennemy.length){
-		for(var i = 0; i< this.ennemy.length; i++){
-			if(this.collisionAABB(this.ennemy[i])){
-				this.movable = false;
-			} else {
-				this.movable = true;
-			}
-		}
+Item.prototype.attachTo = function(canvas){
+	this.canvas = canvas;
+	this.ctx = canvas.getCtx();
+	canvas.addItem(this);
+	for(var i = 0; i < this.child.length; i++){
+		this.child[i].canvas = canvas;
+		this.child[i].ctx = canvas.getCtx();
 	}
-	/////////////////////////////
+};
+
+Item.prototype.update = function(){
 	if(this.movable){
 		if(this.moving["haut"] == true)
 			this.y = this.y - 5;
@@ -74,9 +73,9 @@ Item.prototype.mouseMove = function(e){
 		//this.canvas.update();
 	} else {
 		if(this.isOnIt(new Pointer(e.pageX, e.pageY)) && this.draggable){
-			$(this.canvas).css("cursor", "pointer");
+			$(this.canvas.getCanvas()).css("cursor", "pointer");
 		} else {
-			$(this.canvas).css("cursor", "auto");
+			$(this.canvas.getCanvas()).css("cursor", "auto");
 		}
 	}
 };
@@ -152,17 +151,5 @@ Item.prototype.contains = function(item){
 		return true;
 	else 
 		return false;
-};
-
-// Détermine si l'item courant entre en colission avec un autre.
-Item.prototype.collisionAABB = function(item){
-	console.log(item.x, this.x + this.width);
-	if((item.x >= this.x + this.width) // trop à droite
-	|| (item.x + item.width <= this.x) // trop à gauche
-	|| (item.y >= this.y + this.height) // trop en Base
-	|| (item.y + item.height <= item.y)) // trop en Haut
-		return false;
-	else 
-		return true;
 };
 

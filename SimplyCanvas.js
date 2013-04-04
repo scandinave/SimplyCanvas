@@ -8,6 +8,7 @@
  */
 var SimplyCanvas = function(name, width, height){
 		var items = new Array();
+		var pictures = new Array();
 		var canvas = document.createElement("canvas");
 		canvas.id = name;
 		canvas.height = height;
@@ -15,10 +16,12 @@ var SimplyCanvas = function(name, width, height){
 		var conteneur = document.getElementById("simplyCanvas");
 		conteneur.appendChild(canvas);
 		var ctx = canvas.getContext('2d');
+		this.preload = true;
 		
 		this.addItem = function(item){
-			item.canvas = canvas;
-			item.ctx = ctx;
+			if(items instanceof Picture){
+				picture.push(item);		
+			}
 			items.push(item);
 		};
 		
@@ -34,8 +37,24 @@ var SimplyCanvas = function(name, width, height){
 			return items;
 		};
 		
-		function update(){
+		
+		var drawLoader = function(){
 			
+		}
+		
+		var preloadPicture = function(){
+			for(var i = 0; i < pictures.length; i++){
+				var img = new Image();
+				img.src = pictures[i].src;
+				img.onload = drawLoader(i+1); //Update loader to reflect picture loading progress
+				pictures[i].img = img;
+			}
+		}
+		
+		var update = function(){
+			if(this.preload){
+				preloadPicture();	
+			}
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			for(var i = 0; i < items.length; i++){
 				items[i].update();
@@ -44,7 +63,6 @@ var SimplyCanvas = function(name, width, height){
 		};
 		
 		this.update = function(){
-			//var timer = setInterval(update, 1000/60);
 			update();
 		};
 		
