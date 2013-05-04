@@ -1,7 +1,7 @@
 function Dock(side, x ,y, width, height){
 	Container.call(this, x ,y, width, height);
 	this.side = side;
-}
+};
 
 extend(Dock, Container);
 Dock.prototype.draw = function(){
