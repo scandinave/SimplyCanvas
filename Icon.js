@@ -1,11 +1,9 @@
 function Icon(src, x, y, width, height){
 	Container.call(this, x ,y, width, height);
 	this.src = src;
-}
+};
 
-Icon.prototype = new Container();
-Icon.prototype.constructor = Icon;
-Icon.prototype.parent = Container.prototype;
+extend(Icon, Container);
 Icon.prototype.draw = function(){
 	// On initialise la police du text pour récuperer la taille.
 	this.child[0].init();

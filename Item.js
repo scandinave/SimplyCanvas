@@ -16,16 +16,6 @@ function Item(x, y, width, height){
 	this.child = new Array();
 }
 
-Item.prototype.attachTo = function(canvas){
-	this.canvas = canvas;
-	this.ctx = canvas.getCtx();
-	canvas.addItem(this);
-	for(var i = 0; i < this.child.length; i++){
-		this.child[i].canvas = canvas;
-		this.child[i].ctx = canvas.getCtx();
-	}
-};
-
 Item.prototype.update = function(){
 	if(this.movable){
 		if(this.moving["haut"] == true)
@@ -40,6 +30,13 @@ Item.prototype.update = function(){
 	this.draw();
 };
 
+Item.prototype.setPosition = function(x, y) {
+	this.clear();
+	this.x = x;
+	this.y = y;
+	
+	this.update();
+};
 Item.prototype.getUniqueID = function() {
 	var uniqueID = new Date();
 	return uniqueID.getTime() + '' + Math.floor(Math.random()*1000); 
@@ -73,9 +70,9 @@ Item.prototype.mouseMove = function(e){
 		//this.canvas.update();
 	} else {
 		if(this.isOnIt(new Pointer(e.pageX, e.pageY)) && this.draggable){
-			$(this.canvas.getCanvas()).css("cursor", "pointer");
+			$(this.canvas).css("cursor", "pointer");
 		} else {
-			$(this.canvas.getCanvas()).css("cursor", "auto");
+			$(this.canvas).css("cursor", "auto");
 		}
 	}
 };

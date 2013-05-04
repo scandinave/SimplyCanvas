@@ -18,9 +18,23 @@ var SimplyCanvas = function(name, width, height){
 		var ctx = canvas.getContext('2d');
 		this.preload = true;
 		
+		this.recursive = function(item){
+			for(var i = 0; i < item.child.length; i++){
+				var child = item.child[i];
+				child.canvas = canvas;
+				child.ctx = ctx;
+				if(child.child.length != 0){
+					this.recursive(child);
+				}
+			}
+		};
+	
 		this.addItem = function(item){
-			if(items instanceof Picture){
-				picture.push(item);		
+			item.ctx = this.getCtx();
+			item.canvas = this.getCanvas();
+			this.recursive(item);
+			if(item instanceof Picture){
+				pictures.push(item);		
 			}
 			items.push(item);
 		};
@@ -38,8 +52,9 @@ var SimplyCanvas = function(name, width, height){
 		};
 		
 		
-		var drawLoader = function(){
-			
+		var drawLoader = function(){	
+			// ctx.fillStyle("black");
+			ctx.fillRect(0,0,700,1000);
 		}
 		
 		var preloadPicture = function(){
@@ -54,6 +69,7 @@ var SimplyCanvas = function(name, width, height){
 		var update = function(){
 			if(this.preload){
 				preloadPicture();	
+				this.preload = false;
 			}
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			for(var i = 0; i < items.length; i++){
@@ -146,3 +162,15 @@ var SimplyCanvas = function(name, width, height){
 			return false;	
 		};
 };
+
+
+function extend(subClass, superClass) {
+	var F = function() {};
+	F.prototype = superClass.prototype;
+	subClass.prototype = new F();
+	subClass.prototype.constructor = subClass;
+	subClass.prototype.parent = superClass.prototype;
+	if(superClass.prototype.constructor == Object.prototype.constructor) {
+		superClass.prototype.constructor = superClass;
+	}
+}

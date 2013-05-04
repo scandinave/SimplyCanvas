@@ -3,8 +3,7 @@ function Dock(side, x ,y, width, height){
 	this.side = side;
 }
 
-Dock.prototype = new Container();
-Dock.prototype.constructor = Dock;
+extend(Dock, Container);
 Dock.prototype.draw = function(){
 	var loading = function(ctx, x, y, width, height) {
 		ctx.drawImage(img, x, y, width, height);

@@ -2,8 +2,7 @@ function Container(x, y, width, height){
 	Item.call(this, x ,y, width, height);
 }
 
-Container.prototype = new Item();
-Container.prototype.constructor = Container;
+extend(Container, Item);
 Container.prototype.draw = function(){
 	for(var i = 0; i < this.child.length; i++){
 			this.child[i].draw();

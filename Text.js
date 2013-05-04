@@ -7,8 +7,7 @@ function Text(message, x, y, plain){
 	this.textAlign = "start";
 }
 
-Text.prototype = new Item();
-Text.prototype.constructor = Text;
+extend(Text, Item);
 Text.prototype.draw = function(){
 	this.ctx.font = this.font;
 	this.width = this.ctx.measureText(this.message).width;

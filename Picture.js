@@ -4,6 +4,7 @@ function Picture(src, x, y, width, height){
 	this.img = null;
 }
 
+extend(Picture, Item);
 Picture.prototype = new Item();
 Picture.prototype.constructor = Picture;
 Picture.prototype.draw = function(){
