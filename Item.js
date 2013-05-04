@@ -70,9 +70,9 @@ Item.prototype.mouseMove = function(e){
 		//this.canvas.update();
 	} else {
 		if(this.isOnIt(new Pointer(e.pageX, e.pageY)) && this.draggable){
-			$(this.canvas).css("cursor", "pointer");
+			this.canvas.style.cursor = "pointer";
 		} else {
-			$(this.canvas).css("cursor", "auto");
+			this.canvas.style.cursor = "auto";
 		}
 	}
 };

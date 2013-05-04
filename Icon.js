@@ -32,9 +32,6 @@ Icon.prototype.addText = function(item){
 
 
 Icon.prototype.addPicture = function(item){
-	console.log(this.canvas, this.ctx);
-		item.canvas = this.canvas;
-		item.ctx = this.ctx;
 		this.child[1] = item;
 };
 

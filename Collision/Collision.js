@@ -7,19 +7,13 @@ function Collision(implementatation){
 			collision = new AABBCollision();
 		break;
 		default:
-			collision = new AABBCollision();
+			console.log("toto");
+			try{
+				path = instantiate(implementation)
+			} catch(e) {
+				throw Error("Undefined implemantation name " + implementation);
+			}
 	}
 	Interface.ensureImplements(collision, CollisionInterface);
 	return collision;
 }
-
-Collision.prototype.touch = function(item1, item2){
-	//this.implementation.touch(item1, item2);
-};
-
-
-Collision.prototype.test = function(){
-	throw "Not implemented";
-};
-
-

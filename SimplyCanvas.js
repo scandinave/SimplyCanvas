@@ -174,3 +174,14 @@ function extend(subClass, superClass) {
 		superClass.prototype.constructor = superClass;
 	}
 }
+
+function instantiate(className, args) {
+    var o, f, c;
+    c = window[className]; // get reference to class constructor function
+    f = function(){}; // dummy function
+    f.prototype = c.prototype; // reference same prototype
+    o = new f(); // instantiate dummy function to copy prototype properties
+    c.apply(o, args); // call class constructor, supplying new object as context
+    o.constructor = c; // assign correct constructor (not f)
+    return o;
+}
