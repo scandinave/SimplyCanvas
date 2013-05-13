@@ -6,23 +6,26 @@
  * @author LE BARO Romain
  * @version 0.1
  */
-var SimplyCanvas = function(name, width, height){
+function SimplyCanvas(name, width, height, priority){
 		var items = new Array();
-		var pictures = new Array();
-		var canvas = document.createElement("canvas");
-		canvas.id = name;
-		canvas.height = height;
-		canvas.width = width;
+		this.pictures = new Array();
+		this.canvas = document.createElement("canvas");
+		this.canvas.id = name;
+		this.canvas.height = height;
+		this.canvas.width = width;
 		var conteneur = document.getElementById("simplyCanvas");
-		conteneur.appendChild(canvas);
-		var ctx = canvas.getContext('2d');
+		conteneur.appendChild(this.canvas);
+		this.ctx = this.canvas.getContext('2d');
 		this.preload = true;
+		this.loader = "simpleLoader";
+		this.priority = (priority == null) ? 1 : priority;
+		this.canvas.style.zIndex = this.priority;
 		
 		this.recursive = function(item){
 			for(var i = 0; i < item.child.length; i++){
 				var child = item.child[i];
-				child.canvas = canvas;
-				child.ctx = ctx;
+				child.canvas = this.canvas;
+				child.ctx = this.ctx;
 				if(child.child.length != 0){
 					this.recursive(child);
 				}
@@ -34,7 +37,7 @@ var SimplyCanvas = function(name, width, height){
 			item.canvas = this.getCanvas();
 			this.recursive(item);
 			if(item instanceof Picture){
-				pictures.push(item);		
+				this.pictures.push(item);		
 			}
 			items.push(item);
 		};
@@ -51,66 +54,52 @@ var SimplyCanvas = function(name, width, height){
 			return items;
 		};
 		
-		
-		var drawLoader = function(){	
-			// ctx.fillStyle("black");
-			ctx.fillRect(0,0,700,1000);
-		}
-		
-		var preloadPicture = function(){
-			for(var i = 0; i < pictures.length; i++){
-				var img = new Image();
-				img.src = pictures[i].src;
-				img.onload = drawLoader(i+1); //Update loader to reflect picture loading progress
-				pictures[i].img = img;
-			}
-		}
-		
-		var update = function(){
-			if(this.preload){
-				preloadPicture();	
-				this.preload = false;
-			}
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			for(var i = 0; i < items.length; i++){
-				items[i].update();
-			}
-			window.requestAnimationFrame(update);
-		};
-		
 		this.update = function(){
-			update();
+			if(this.preload){
+				console.log(new Date().getTime());
+				this.preloadRessources();	
+				console.log(new Date().getTime());
+				this.preload = false;
+			} 
+				/*for(var i = 0; i < items.length; i++){
+					if(items[i].isDie){
+						removeItem(items[i]);
+					} else {
+						items[i].update();
+					}
+				} 
+			window.requestAnimationFrame(this.update);*/
 		};
 		
 		this.getCtx = function(){	
-			return ctx;
+			return this.ctx;
 		};
 		
 		this.getCanvas = function(){	
-			return canvas;
+			return this.canvas;
 		};
 		
 		// Détection et gestion de la sourie
-		canvas.onmousepress = function(e){
+		this.canvas.onmousepress = function(e){
 			var item = isOnItem(new Pointer(e.pageX, e.pageY));
 			if(item != false){
 				item.mousePress(e);
 			}
 		};
 		
-		canvas.onmousemove = function(e){
+		this.canvas.onmousemove = function(e){
 			for(var i = 0; i < items.length; i++){
 				items[i].mouseMove(e);
 			}	
 		};
 		
-		canvas.onmouseup = function(e){
+		this.canvas.onmouseup = function(e){
 			for(var i = 0; i < items.length; i++){
 				items[i].mouseUp(e);
 			}	
 		};
 		
-		canvas.ondblclick = function(e){
+		this.canvas.ondblclick = function(e){
 			var item = isOnItem(new Pointer(e.pageX, e.pageY));
 			if(item != false) {
 				item.dblclick(e);
@@ -163,6 +152,12 @@ var SimplyCanvas = function(name, width, height){
 		};
 };
 
+
+SimplyCanvas.prototype.preloadRessources = function(){
+	var loader = new Loader(this.loader);
+	loader.init(this.pictures, this.canvas, this.ctx );
+	loader.draw();
+};
 
 function extend(subClass, superClass) {
 	var F = function() {};

@@ -14,9 +14,14 @@ function Item(x, y, width, height){
 	this.difY = 0; // lors du clique sur un item.
 	this.onDrag = false; // Détermine si un item est en phase de drop.
 	this.child = new Array();
+	
+	this.ennemy = new Array();
+	this.isDie = false;
+	this.isVisible = true;
 }
 
 Item.prototype.update = function(){
+	//this.clear();
 	if(this.movable){
 		if(this.moving["haut"] == true)
 			this.y = this.y - 5;
@@ -31,7 +36,7 @@ Item.prototype.update = function(){
 };
 
 Item.prototype.setPosition = function(x, y) {
-	this.clear();
+
 	this.x = x;
 	this.y = y;
 	
@@ -132,6 +137,9 @@ Item.prototype.keyUp = function(e){
 	}
 };
 
+Item.prototype.die = function(){
+	this.isDie = true;
+}
 
 /**
 * Détermine si un item contient un autre.

@@ -12,7 +12,8 @@
 
 if(window.mozIndexedDB){
 	console.log("yes");
+	console.log(window.mozIndexedDB);
 } else {
-console.log("no");
+	console.log("no");
 	console.log(window.mozIndexedDB);
 }
