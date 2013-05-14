@@ -20,6 +20,7 @@ function SimplyCanvas(name, width, height, priority){
 		this.loader = "simpleLoader";
 		this.priority = (priority == null) ? 1 : priority;
 		this.canvas.style.zIndex = this.priority;
+		var that = this;
 		
 		this.recursive = function(item){
 			for(var i = 0; i < item.child.length; i++){
@@ -54,21 +55,25 @@ function SimplyCanvas(name, width, height, priority){
 			return items;
 		};
 		
-		this.update = function(){
+		var update = function(){
+			
 			if(this.preload){
-				console.log(new Date().getTime());
 				this.preloadRessources();	
-				console.log(new Date().getTime());
 				this.preload = false;
+			}
+			that.ctx.clearRect(0, 0, that.getCanvas().width, that.getCanvas().height);
+			for(var i = 0; i < items.length; i++){
+				if(items[i].isDie){
+					removeItem(items[i]);
+				} else if(items[i].isVisible){
+					items[i].update();
+				}
 			} 
-				/*for(var i = 0; i < items.length; i++){
-					if(items[i].isDie){
-						removeItem(items[i]);
-					} else {
-						items[i].update();
-					}
-				} 
-			window.requestAnimationFrame(this.update);*/
+			window.requestAnimationFrame(update);
+		}
+		
+		this.update = function(){
+			update();
 		};
 		
 		this.getCtx = function(){	
