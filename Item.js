@@ -13,15 +13,14 @@ function Item(x, y, width, height){
 	this.difX = 0; // Calcule le différentiel de position entre la souris et le coin supérieur gauche d'un item
 	this.difY = 0; // lors du clique sur un item.
 	this.onDrag = false; // Détermine si un item est en phase de drop.
-	this.child = new Array();
-	
-	this.ennemy = new Array();
+	this.children = new Array();
+	this.onDie = new Publisher("ennemy");
+	this.ennemies = new Array();
 	this.isDie = false;
 	this.isVisible = true;
 }
 
 Item.prototype.update = function(){
-	//this.clear();
 	if(this.movable){
 		if(this.moving["haut"] == true)
 			this.y = this.y - 5;
@@ -139,7 +138,20 @@ Item.prototype.keyUp = function(e){
 
 Item.prototype.die = function(){
 	this.isDie = true;
-}
+	this.onDie.deliver(this);
+};
+
+Item.prototype.addEnnemy = function(item){
+	this.ennemies.push(item);
+};
+
+Item.prototype.removeEnnemy = function(item){
+	for(var i = 0; i < this.ennemies.length; i++){
+		if(this.ennemies[i].name == item.name){
+			this.ennemies.splice(i,1);
+		}
+	}
+};
 
 /**
 * Détermine si un item contient un autre.

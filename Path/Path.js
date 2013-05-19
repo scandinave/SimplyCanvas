@@ -1,4 +1,4 @@
-var PathInterface = new Interface('Path', ['init', 'next'])
+var PathInterface = new Interface('Path', ['init', 'next']);
 
 /**
  * Le pattern est un chemin.

@@ -7,7 +7,6 @@ function Collision(implementatation){
 			collision = new AABBCollision();
 		break;
 		default:
-			console.log("toto");
 			try{
 				path = instantiate(implementation)
 			} catch(e) {
