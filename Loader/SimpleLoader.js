@@ -1,5 +1,5 @@
 function SimpleLoader(){
-	var ressources ;
+    var ressources ;
 	var canvas;
 	var ctx; 
 	
@@ -51,18 +51,7 @@ SimpleLoader.prototype.draw = function (){
 			}
 			data.img = new Image();
 			data.img.src = data.src;
-			data.img.onload = drawLoader(Number(i)+1); //Update loader to reflect picture loading progress
-		} else if(data instanceof Animation){
-			var drawLoader = function(nbLoad){
-				that.getCtx().clearRect(0, 0, that.getCanvas().width, that.getCanvas().height);
-				that.getCtx().fillStyle = "black";
-				that.getCtx().fillRect(0,0, that.getCanvas().width, that.getCanvas().height);
-				that.getCtx().fillStyle = "white";
-				that.getCtx().fillText("Chargement en cours ... " + Number(nbLoad) +"/"+ Number(100), that.getCanvas().width/2, 100 );
-			}
-			data.img = new Image();
-			data.img.src = data.src;
-			data.frame = data.img.height / data.height;
+			data.frame = ((data.img.height - that.getCanvas().height) / data.vitesse );
 			data.img.onload = drawLoader(Number(i)+1); //Update loader to reflect picture loading progress
 		} else if(data instanceof Video){
 			/* Load video */

@@ -1,9 +1,11 @@
 var SimplyCanvas = function(){
-	var layers = new Array();
+    var layers = new Array();
 	var items = new Array();
+    var timer = new Publisher("timer");
+	timer.start();
 	
 	this.addItem = function(item){
-		items.push(item)
+		items.push(item);
 	};
 	
 	this.removeItem = function(item){
@@ -32,6 +34,10 @@ var SimplyCanvas = function(){
 		return items;
 	};
 	
+	this.getTimer = function(){
+		return timer;
+	};
+    
 	this.update = function(){
 		for(var i = 0; i < layers.length; i++){
 			layers[i].update();

@@ -18,7 +18,7 @@ function Item(x, y, width, height){
 	this.ennemies = new Array();
 	this.isDie = false;
 	this.isVisible = true;
-}
+};
 
 Item.prototype.update = function(){
 	if(this.movable){

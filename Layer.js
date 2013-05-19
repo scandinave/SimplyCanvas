@@ -65,9 +65,9 @@ function Layer(name, width, height, priority){
 		
 		var update = function(){
 			
-			if(this.preload){
-				this.preloadRessources();	
-				this.preload = false;
+			if(that.preload){
+				that.preloadRessources();	
+				that.preload = false;
 			}
 			that.ctx.clearRect(0, 0, that.getCanvas().width, that.getCanvas().height);
 			for(var i = 0; i < items.length; i++){

@@ -2,10 +2,9 @@ function Timer(){
     this.time = 0;
     this.subscribers = [];
 	this.interval;
-};
+}
 
 Timer.prototype.update = function(){
-console.log("toto" + this);
     this.deliver(this.time);
     time++;
 }
@@ -13,12 +12,12 @@ console.log("toto" + this);
 Timer.prototype.start = function(){
     this.interval = setInterval(this.update, 1000);
     return this;
-};
+}
 
 Timer.prototype.stop = function(){
     clearInterval(this.interval);
     return this;
-};
+}
 
 Timer.prototype.deliver = function(time){
     
