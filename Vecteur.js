@@ -1,12 +1,6 @@
-function Vecteur(){
-    this.x = 0;
-	this.y = 0;
-};
-
-Vecteur.prototype.init = function(x, y){
-	this.x = x;
+function Vecteur(x, y){
+    this.x = x;
 	this.y = y;
-	return this;
 };
 
 Vecteur.prototype.setNull = function(){
@@ -29,8 +23,8 @@ Vecteur.prototype.add = function(v){
 
 
 Vecteur.prototype.sub = function(v){
-	this.x += v.x;
-	this.y += v.y;
+	this.x -= v.x;
+	this.y -= v.y;
 	return this;
 };
 

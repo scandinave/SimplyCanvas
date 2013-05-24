@@ -42,6 +42,7 @@ function Layer(name, width, height, priority){
 		this.addItem = function(item){
 			item.ctx = this.getCtx();
 			item.canvas = this.getCanvas();
+			item.trajectoireWorker = this.trajectoireWorker;
 			this.recursive(item);
 			if(item instanceof Picture){
 				this.pictures.push(item);		

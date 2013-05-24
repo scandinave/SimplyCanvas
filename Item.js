@@ -18,18 +18,50 @@ function Item(x, y, width, height){
 	this.ennemies = new Array();
 	this.isDie = false;
 	this.isVisible = true;
+	this.forces = new Array();
+	this.vitesse = 1;
+	
 };
 
+/**
+* function update of the item. This function updates all caractéristic of item during the loop.
+* 2 Case, the first, item is movable, so we manage the moving by keyboard.
+* The second, the item has one or more forces over it. In this case, we resolves this forces by calculating it resulting.
+*/
 Item.prototype.update = function(){
 	if(this.movable){
 		if(this.moving["haut"] == true)
-			this.y = this.y - 5;
+					   this.y = this.y - 5;
 		if(this.moving["bas"] == true)
-			this.y = this.y + 5;
+					   this.y = this.y + 5;
 		if(this.moving["droite"] == true)
-			this.x = this.x + 5;
+					   this.x = this.x + 5;
 		if(this.moving["gauche"] == true)
-			this.x = this.x - 5;
+					   this.x = this.x - 5;
+	} else if(this.forces.length > 0) { 
+		var resultante = new Vecteur(this.forces[0].x, this.forces[0].y);
+		// We add the vectors for calculate the resulting force
+		for(var i=1; i<this.forces.length; i++){
+					   resultante.add(this.forces[i]);
+		}
+		var x = 0;
+		var y = 0;
+		var absX = Math.abs(Number(resultante.x));
+		var absY =  Math.abs(Number(resultante.y));
+	  
+		// We calculate the variations of x and y.
+		if(absX > absY) {
+		   x = Number(resultante.x) / absX;
+		   y = Number(resultante.y) / absX;
+		} else if(absY > absX){
+		   x = Number(resultante.x) / absY;
+		   y = Number(resultante.y) / absY;
+		} else {
+		   x = Number(resultante.x);
+		   y = Number(resultante.y);
+		}
+		// We update the position of the item taking into account of velocity
+		this.setPosition(this.x + (x*this.vitesse), this.y+(y*this.vitesse));
 	}
 	this.draw();
 };
@@ -38,8 +70,6 @@ Item.prototype.setPosition = function(x, y) {
 
 	this.x = x;
 	this.y = y;
-	
-	this.update();
 };
 Item.prototype.getUniqueID = function() {
 	var uniqueID = new Date();

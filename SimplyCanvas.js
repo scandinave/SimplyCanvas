@@ -3,7 +3,6 @@ var SimplyCanvas = function(){
 	var items = new Array();
     var timer = new Publisher("timer");
 	timer.start();
-	
 	this.addItem = function(item){
 		items.push(item);
 	};
@@ -29,6 +28,10 @@ var SimplyCanvas = function(){
 			}
 		}
 	};
+	
+	this.getLayers = function(){
+		return layers;
+	}
 	
 	this.getItems = function(){
 		return items;

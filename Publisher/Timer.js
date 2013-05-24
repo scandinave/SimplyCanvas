@@ -5,13 +5,15 @@ function Timer(){
 };
 
 Timer.prototype.update = function(){
-console.log("toto" + this);
     this.deliver(this.time);
-    time++;
+    this.time++;
 }
 
 Timer.prototype.start = function(){
-    this.interval = setInterval(this.update, 1000);
+	var that = this;
+    this.interval = setInterval(function(){
+		that.update();
+	}, 1000);
     return this;
 };
 
@@ -21,10 +23,9 @@ Timer.prototype.stop = function(){
 };
 
 Timer.prototype.deliver = function(time){
-    
 	this.subscribers.forEach(
 		function(element, index, array){
-			element.time(time);
+			element.setTime(time);
 		}
 	);
 	return this;
