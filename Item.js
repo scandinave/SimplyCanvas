@@ -18,8 +18,10 @@ function Item(x, y, width, height){
 	this.ennemies = new Array();
 	this.isDie = false;
 	this.isVisible = true;
-	this.forces = new Array();
-	this.vitesse = 1;
+	this._forces = new Array();
+	this.vitesse = 1.5;
+	this._forcesRefresh = false;
+	this._ArrayResultante = [];
 	
 };
 
@@ -38,30 +40,37 @@ Item.prototype.update = function(){
 					   this.x = this.x + 5;
 		if(this.moving["gauche"] == true)
 					   this.x = this.x - 5;
-	} else if(this.forces.length > 0) { 
-		var resultante = new Vecteur(this.forces[0].x, this.forces[0].y);
-		// We add the vectors for calculate the resulting force
-		for(var i=1; i<this.forces.length; i++){
-					   resultante.add(this.forces[i]);
+	} else if(this._forces.length > 0) { 
+		if(this._forcesRefresh){
+			var resultante = new Vecteur(this._forces[0].x, this._forces[0].y);
+			// We add the vectors for calculate the resulting force
+			for(var i=1; i<this._forces.length; i++){
+						   resultante.add(this._forces[i]);
+			}
+			var x = 0;
+			var y = 0;
+			var absX = Math.abs(Number(resultante.x));
+			var absY =  Math.abs(Number(resultante.y));
+		  
+			// We calculate the variations of x and y.
+			if(absX > absY) {
+			   x = Number(resultante.x) / absX;
+			   y = Number(resultante.y) / absX;
+			} else if(absY > absX){
+			   x = Number(resultante.x) / absY;
+			   y = Number(resultante.y) / absY;
+			} else {
+			   x = Number(resultante.x);
+			   y = Number(resultante.y);
+			}
+			this._ArrayResultante["x"] = x;
+			this._ArrayResultante["y"] = y;
+			this._forcesRefresh = false;
+			console.log(this._ArrayResultante);
 		}
-		var x = 0;
-		var y = 0;
-		var absX = Math.abs(Number(resultante.x));
-		var absY =  Math.abs(Number(resultante.y));
-	  
-		// We calculate the variations of x and y.
-		if(absX > absY) {
-		   x = Number(resultante.x) / absX;
-		   y = Number(resultante.y) / absX;
-		} else if(absY > absX){
-		   x = Number(resultante.x) / absY;
-		   y = Number(resultante.y) / absY;
-		} else {
-		   x = Number(resultante.x);
-		   y = Number(resultante.y);
-		}
+		
 		// We update the position of the item taking into account of velocity
-		this.setPosition(this.x + (x*this.vitesse), this.y+(y*this.vitesse));
+		this.setPosition(this.x + (this._ArrayResultante["x"]*this.vitesse), this.y+(this._ArrayResultante["y"]*this.vitesse));
 	}
 	this.draw();
 };
@@ -181,6 +190,11 @@ Item.prototype.removeEnnemy = function(item){
 			this.ennemies.splice(i,1);
 		}
 	}
+};
+
+Item.prototype.addForce = function(vector){
+	this._forcesRefresh = true;
+	this._forces.push(vector);
 };
 
 /**
