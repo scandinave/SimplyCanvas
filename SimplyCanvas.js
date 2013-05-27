@@ -1,8 +1,17 @@
+/**
+ * SimplyCanvas is a library that propose to make development with canvas more easy.
+ * It is build with POO pattern to allow maintainability and discovery more easier.
+ * This class represent a layer. A layer correspond to one canvas. A symplyCanvas application
+ * can handle one or multiple canvas. The advantage of multiple canvas is performance.
+ * @author LE BARO Romain
+ * @version 0.5
+ */
 var SimplyCanvas = function(){
     var layers = new Array();
 	var items = new Array();
     var timer = new Publisher("timer");
 	timer.start();
+	var eventListener = EventListener.getInstance();
 	this.addItem = function(item){
 		items.push(item);
 	};
@@ -40,7 +49,7 @@ var SimplyCanvas = function(){
 	this.getTimer = function(){
 		return timer;
 	};
-    
+	
 	this.update = function(){
 		for(var i = 0; i < layers.length; i++){
 			layers[i].update();
@@ -55,9 +64,7 @@ var SimplyCanvas = function(){
 	}
 	
 	function keyDown(event){
-		for(var i = 0; i < layers.length; i++){
-			layers[i].keyDown(event);
-		}
+		eventListener.deliver("keyDown", event);
 	};
 	
 	// Transmission des événement clavier touche relachée aux objets fils.
@@ -68,59 +75,48 @@ var SimplyCanvas = function(){
 	}
 	
 	function keyUp(event){
-		for(var i = 0; i < layers.length; i++){
-			layers[i].keyUp(event);
-		}
+		eventListener.deliver("keyUp", event);
 	};
 	
 	// Transmission des événement souris aux objects fils.
 	if(document.body.onmousepress){
-		document.body.onmousepress = onMousePress;
+		document.body.onmousepress = mousePress;
 	} else if (document){
-		document.onmousepress = onMousePress;
+		document.onmousepress = mousePress;
 	}
 	
-	function onMousePress(event){
-		for(var i = 0; i < layers.length; i++){
-			layers[i].mousePress(event);
-		}
+	function mousePress(event){
+		eventListener.deliver("mousePress", event);
 	};
 	
 	if(document.body.onmousemove){
-		document.body.onmousemove = onMouseMove;
+		document.body.onmousemove = mouseMove;
 	} else if (document){
-		document.onmousemove = onMouseMove;
+		document.onmousemove = mouseMove;
 	}
 	
-	function onMouseMove(event){
-		for(var i = 0; i < layers.length; i++){
-			layers[i].mouseMove(event);
-		}
+	function mouseMove(event){
+		eventListener.deliver("mouseMove", event);
 	};
 	
 	if(document.body.onmouseup){
-		document.body.onmouseup = onMouseUp;
+		document.body.onmouseup = mouseUp;
 	} else if (document){
-		document.onmouseup = onMouseUp;
+		document.onmouseup = mouseUp;
 	}
 	
-	function onMouseUp(event){
-		for(var i = 0; i < layers.length; i++){
-			layers[i].mouseUp(event);
-		}
+	function mouseUp(event){
+		eventListener.deliver("mouseUp", event);
 	};
 	
 	if(document.body.ondblclick){
-		document.body.ondblclick = onDblClick;
+		document.body.ondblclick = dblClick;
 	} else if (document){
-		document.ondblclick = onDblClick;
+		document.ondblclick = dblClick;
 	}
 	
-	function onDblClick(event){
-		console.log("toto");
-		for(var i = 0; i < layers.length; i++){
-			layers[i].dblclick(event);
-		}
+	function dblClick(event){
+		eventListener.deliver("dblClick", event);
 	};
 };
 

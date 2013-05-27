@@ -17,7 +17,7 @@ function HashMap(keyType, valueType){
 	};
 
 	this.get = function (key){
-		return value[key];
+		return values[key];
 	};
 
 	this.clear = function (){

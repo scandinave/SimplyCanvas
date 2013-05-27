@@ -1,17 +1,10 @@
-/**
- * SymplyCanvas is a library that propose to make development with canvas more easy.
- * It is build with POO pattern to allow maintainability and discovery more easier.
- * This class represent a layer. A layer correspond to one canvas. A symplyCanvas application
- * can handle one or multiple canvas. The advantage of multiple canvas is performance.
- * @author LE BARO Romain
- * @version 0.5
- */
+
 function Layer(name, width, height, priority){
 		var that = this;
 		var master;
 		this.name = name;
 		var items = new Array();
-		this.pictures = new Array();
+		this.resources = new Array();
 		this.canvas = document.createElement("canvas");
 		this.canvas.id = name;
 		this.canvas.height = height;
@@ -28,13 +21,13 @@ function Layer(name, width, height, priority){
 		this.canvas.style.zIndex = this.priority;
 		
 		
-		this.recursive = function(item){
+		var recursive = function(item){
 			for(var i = 0; i < item.children.length; i++){
 				var child = item.children[i];
-				child.canvas = this.canvas;
-				child.ctx = this.ctx;
+				child.canvas = that.canvas;
+				child.ctx = that.ctx;
 				if(child.children.length != 0){
-					this.recursive(child);
+					recursive(child);
 				}
 			}
 		};
@@ -43,9 +36,9 @@ function Layer(name, width, height, priority){
 			item.ctx = this.getCtx();
 			item.canvas = this.getCanvas();
 			item.trajectoireWorker = this.trajectoireWorker;
-			this.recursive(item);
+			recursive(item);
 			if(item instanceof Picture){
-				this.pictures.push(item);		
+				this.resources.push(item);		
 			}
 			items.push(item);
 			master.addItem(item);
@@ -97,24 +90,28 @@ function Layer(name, width, height, priority){
 		
 		this.setMaster = function(newMaster){
 			master = newMaster;
-		}
+		};
+		
+		this.getMaster = function(){
+			return master;
+		};
 		
 };
-Layer.prototype.getUniqueID = function() {
+/*Layer.prototype.getUniqueID = function() {
 	var uniqueID = new Date();
 	return uniqueID.getTime() + '' + Math.floor(Math.random()*1000); 
 	
-};
+};*/
 
 
 Layer.prototype.preloadRessources = function(){
 	var loader = new Loader(this.loader);
-	loader.init(this.pictures, this.canvas, this.ctx );
+	loader.init(this.resources, this.canvas, this.ctx );
 	loader.draw();
 };
 
 
-Layer.prototype.keyUp = function(event){
+/*Layer.prototype.keyUp = function(event){
 	for(var i = 0; i < this.getItems().length; i++){
 		this.getItems()[i].keyUp(event);
 	}
@@ -150,9 +147,9 @@ Layer.prototype.dblclick = function(event){
 	if(item != false) {
 		item.dblclick(event);
 	}
-};
+};*/
 
-Layer.prototype.isOnItem = function(pointer){
+/*Layer.prototype.isOnItem = function(pointer){
 	//Test si la souris est sur un item.
 	for(var i = 0; i < this.getItems().length; i++){
 		var item =  this.getItems()[i];
@@ -169,4 +166,4 @@ Layer.prototype.isOnItem = function(pointer){
 		}
 	}
 	return false;	
-}
+}*/

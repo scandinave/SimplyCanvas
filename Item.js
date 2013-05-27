@@ -66,7 +66,6 @@ Item.prototype.update = function(){
 			this._ArrayResultante["x"] = x;
 			this._ArrayResultante["y"] = y;
 			this._forcesRefresh = false;
-			console.log(this._ArrayResultante);
 		}
 		
 		// We update the position of the item taking into account of velocity
@@ -214,3 +213,61 @@ Item.prototype.contains = function(item){
 		return false;
 };
 
+
+Item.prototype.addEvent = function(event){
+	var eventMap = EventListener.getInstance().subscribers;
+	if(!eventMap.containsKey(event)){
+		eventMap.put(event, new Array());
+	};
+	EventListener.getInstance().subscribers.get(event).push(this);
+};
+
+
+Item.prototype.addEvents = function(events){
+	for(var i = 0; i < events.length; i++){
+		this.addEvent(events[i]);
+	}
+};
+
+
+Item.prototype.addAllEvents = function(device){
+	var desktop = ['keyDown', 'keyUp', 'keyPress', 'blur', 'change', 'click', 'contextMenu', 'copy', 'cut', 'dblClick', 'error', 'focus', 'focusin', 'focusout', 'load', 'mouseMove', 'mouseOut',
+		'mouseOver', 'mouseUp', 'mouseWheel', 'mouseDown'];
+	var keyBoard = ['keyDown', 'keyUp', 'keyPress', 'paste', 'copy', 'cut']
+	var mouse = ['click', 'contextMenu', 'dblClick','mouseMove', 'mouseOut', 'mouseOver', 'mouseUp', 'mouseWheel', 'mouseDown']
+	var mobile = ['touchStart', 'touchEnd', 'touchMove'];
+	var all = ['keyDown', 'keyUp', 'keyPress', 'blur', 'change', 'click', 'contextMenu', 'copy', 'cut', 'dblClick', 'error', 'focus', 'focusin', 'focusout', 'load', 'mouseMove', 'mouseOut',
+		'mouseOver', 'mouseUp', 'mouseWheel', 'mouseDown', 'touchStart', 'touchEnd', 'touchMove'];
+	switch(device){
+		case 'desktop':
+			for(var i = 0; i < desktop.length; i++){
+				this.addEvent(desktop[i]);
+			}
+		break;
+		case 'keyBoard':
+			for(var i = 0; i < keyBoard.length; i++){
+				this.addEvent(keyBoard[i]);
+			}
+		break;
+		case 'mouse':
+			for(var i = 0; i < mouse.length; i++){
+				this.addEvent(mouse[i]);
+			}
+		break;
+		case 'mobile':
+			for(var i = 0; i < mobile.length; i++){
+				this.addEvent(mobile[i]);
+			}
+		break;
+		case 'all':
+			for(var i = 0; i < all.length; i++){
+				this.addEvent(all[i]);
+			}
+		break;
+		default:
+			for(var i = 0; i < desktop.length; i++){
+				this.addEvent(desktop[i]);
+			}
+		break;
+	}
+};
